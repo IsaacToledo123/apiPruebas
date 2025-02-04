@@ -63,7 +63,7 @@ const setupProductRoutes = () => {
     // Crear un nuevo producto
     app.post("/products", (req, res) => {
         const { id, name, price, imageUrl } = req.body;
-        if (!id || !name || !price) {
+        if ( !name || !price) {
             return res.status(400).json({ error: "Faltan datos obligatorios" });
         }
         
