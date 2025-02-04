@@ -135,7 +135,7 @@ const setupUserRoutes = () => {
     // Crear usuario
     app.post("/users", (req, res) => {
         const { id, username, password } = req.body;
-        if (!id || !username || !password) {
+        if ( !username || !password) {
             return res.status(400).json({ error: "Faltan datos obligatorios" });
         }
         
