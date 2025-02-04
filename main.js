@@ -22,7 +22,7 @@ const db = mysql.createPool({
 const initializeDatabase = () => {
     // Crea tabla de productos
     const createProductsTable = `CREATE TABLE IF NOT EXISTS products (
-        id VARCHAR(255) PRIMARY KEY,
+        id INT AUTO_INCREMENT PRIMARY KEY,
         name VARCHAR(255) NOT NULL,
         price DOUBLE NOT NULL,
         imageUrl TEXT
@@ -62,18 +62,23 @@ const setupProductRoutes = () => {
 
     // Crear un nuevo producto
     app.post("/products", (req, res) => {
-        const { id, name, price, imageUrl } = req.body;
-        if ( !name || !price) {
+        const { name, price, imageUrl } = req.body;
+        if (!name || !price) {
             return res.status(400).json({ error: "Faltan datos obligatorios" });
         }
         
-        const query = "INSERT INTO products (id, name, price, imageUrl) VALUES (?, ?, ?, ?)";
-        db.query(query, [id, name, price, imageUrl], (err, result) => {
+        const query = "INSERT INTO products (name, price, imageUrl) VALUES (?, ?, ?)";
+        db.query(query, [name, price, imageUrl], (err, result) => {
             if (err) {
                 console.error("Error al crear producto:", err);
                 return res.status(500).json({ error: err.message });
             }
-            res.status(201).json({ id, name, price, imageUrl });
+            res.status(201).json({ 
+                id: result.insertId, 
+                name, 
+                price, 
+                imageUrl 
+            });
         });
     });
 
